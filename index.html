@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Let’sQuiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bar">
+    <button class="logo" onclick="go('home')" aria-label="Let’sQuiz, ir ao início">
+      <i>Let</i><u>’s</u><b>Quiz</b>
+    </button>
+    <div class="tools">
+      <button class="ib" id="usr" onclick="reg()">👤 Entrar</button>
+      <button class="ib" id="out" onclick="logout()" hidden>🚪 Sair</button>
+      <button class="ib" id="tr" onclick="setTroll(!TR)" aria-label="Modo troll" aria-pressed="false">🤡</button>
+      <button class="ib" id="mu" onclick="music(!mus)" aria-label="Ligar ou silenciar a música">🔇</button>
+      <button class="ib" id="th" onclick="theme()" aria-label="Alternar modo escuro">🌙</button>
+      <button class="ib" onclick="$('#acd').showModal()" aria-label="Opções de acessibilidade">♿</button>
+    </div>
+  </div>
+
+  <main>
+    <section class="v on" id="home">
+      <div class="hero">
+        <div class="screen" aria-label="Demonstração animada de um quiz">
+          <div id="demo"></div>
+        </div>
+        <button class="btn" id="go" onclick="music(true);go('menu')">Começar!</button>
+      </div>
+    </section>
+
+    <section class="v" id="menu">
+      <div class="wrap">
+        <h1 style="font-size:clamp(34px,6vw,58px)">Escolha seu desafio 🎯</h1>
+        <div class="menu">
+          <div>
+            <div class="cats" id="cats"></div>
+          </div>
+          <aside>
+            <div class="pan">
+              <h2>🏅 Ranking</h2>
+              <ol id="rk"></ol>
+              <p id="rkn" style="margin:8px 0 0;font-size:15px"></p>
+            </div>
+            <div class="pan">
+              <h2>Níveis</h2>
+              <div id="lvi"></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="v" id="level">
+      <div class="wrap" style="text-align:center">
+        <h1 id="lt"></h1>
+        <p>Agora escolha o nível:</p>
+        <div class="lv" id="lvs"></div>
+        <button class="btn alt" onclick="go('menu')">← Voltar</button>
+      </div>
+    </section>
+
+    <section class="v" id="quiz">
+      <div class="qbox">
+        <div class="prog" role="progressbar" aria-label="Progresso do quiz" aria-valuemin="0" aria-valuemax="100" id="pg">
+          <div id="pb"></div>
+        </div>
+        <p id="pc" style="margin:8px 0 0"></p>
+        <h2 class="qt" id="qt"></h2>
+        <div class="opts" id="op"></div>
+        <div id="fb" role="status" aria-live="polite"></div>
+        <div style="text-align:center">
+          <button class="btn" id="cf" disabled onclick="confirmA()">Confirmar</button>
+          <button class="btn alt" id="nx" hidden onclick="next()">Próxima →</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="v" id="result">
+      <div class="res">
+        <h1 id="rm2"></h1>
+        <div class="sc" id="rs"></div>
+        <p id="rd" style="font-size:20px"></p>
+        <p id="rp" style="font-size:22px"></p>
+        <button class="btn" onclick="start(S.c,S.l)">🔁 Refazer</button>
+        <button class="btn" onclick="nextQuiz()">⏭️ Próximo quiz</button>
+        <button class="btn alt" onclick="go('menu')">🧩 Nova categoria</button>
+        <button class="btn alt" onclick="go('home')">🏠 Início</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Feito com café e muito código</span> <strong>Let’sQuiz</strong> <span>2026</span>
+    <p>Desenvolvido por Daniela Soares, Deisiane Ramos, Gisele Rodrigues, Joyce Lima e Rafaela Simões</p>
+  </footer>
+
+  <dialog id="regd">
+    <form method="dialog" id="af" onsubmit="auth(event)">
+      <h2 id="at">Criar conta</h2>
+      <label for="nm" id="nml">Nome</label>
+      <input type="text" id="nm" maxlength="20" autocomplete="name">
+      <label for="em">E-mail</label>
+      <input type="email" id="em" required autocomplete="email">
+      <label for="pw">Senha (mínimo 6 caracteres)</label>
+      <div class="pwb">
+        <input type="password" id="pw" required minlength="6" autocomplete="current-password">
+        <button type="button" class="eye" id="eye" onclick="seePw()" aria-label="Mostrar senha" aria-pressed="false">👁️</button>
+      </div>
+      <p id="ae" role="alert" style="color:var(--bad);min-height:1.4em;margin:0"></p>
+      <button class="btn" type="submit" id="asb">Cadastrar</button>
+      <button class="btn alt" type="button" id="amt" onclick="mode(!isReg)">Já tenho conta</button>
+      <button class="btn alt" type="button" onclick="$('#regd').close()">Agora não</button>
+    </form>
+  </dialog>
+
+  <dialog id="acd">
+    <h2>♿ Acessibilidade</h2>
+    <label class="sw"><input type="checkbox" data-p="hc"> Alto contraste</label>
+    <label class="sw"><input type="checkbox" data-p="cb"> Modo daltônico (paleta segura para todos os tipos)</label>
+    <label class="sw"><input type="checkbox" data-p="lg"> Texto grande</label>
+    <label class="sw"><input type="checkbox" data-p="sf"> Fonte simples e legível</label>
+    <label class="sw"><input type="checkbox" data-p="rm"> Reduzir animações</label>
+    <p style="font-size:15px">Acertos e erros também aparecem com ✔ e ✖, nunca só com cor.</p>
+    <button class="btn" onclick="$('#acd').close()">Fechar</button>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
